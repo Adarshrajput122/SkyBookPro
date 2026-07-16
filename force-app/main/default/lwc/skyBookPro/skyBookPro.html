@@ -1,0 +1,98 @@
+<template>
+    <div class="slds-box slds-theme_default main-application-container">
+        
+        <!-- Master Activity Progress Loader Spinner -->
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Orchestrating backend execution threads..." size="large"></lightning-spinner>
+        </template>
+
+        <!-- VIEW STAGE A: Outbound Flight Route Searching Interface (Criteria 15 & 16) -->
+        <template if:true={displaySearchStage}>
+            <lightning-layout multiple-rows="true" vertical-align="stretch">
+                <lightning-layout-item size="12" padding="around-small">
+                    <c-flight-search-form onflightsearch={handleOutboundFlightSearchRequest}></c-flight-search-form>
+                </lightning-layout-item>
+                
+                <lightning-layout-item size="12" padding="around-small">
+                    <c-flight-results-list 
+                        flight-offers={discoveredOffersCatalog} 
+                        onselectflight={handleFlightTicketSelection}>
+                    </c-flight-results-list>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+
+        <!-- VIEW STAGE B: Passenger Manifest Data Inputs Entry Forms (Criteria 17 & 18) -->
+        <template if:true={displayCheckoutStage}>
+            <div class="slds-p-around_small">
+                <!-- Renders N sub-forms dynamically based on active passengers count -->
+                <c-passenger-details-form passenger-count={activePassengerCount}></c-passenger-details-form>
+                
+                <!-- Order summaries breakdowns checkout card component -->
+                <div class="slds-m-top_medium">
+                    <lightning-card title="Review Order Summary Pricing Details" icon-name="utility:money">
+                        <div class="slds-p-around_medium">
+                            <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                                <p><strong>Selected Target Flight Offer Key Reference:</strong> {activeOfferId}</p>
+                                <p class="slds-text-heading_medium slds-text-color_success"><strong>Total Fare Due: GBP {activeExpectedPrice}</strong></p>
+                            </div>
+                            <div class="slds-text-align_right">
+                                <lightning-button variant="neutral" label="Cancel" class="slds-m-right_small" onclick={handleReturnToSearchStage}></lightning-button>
+                                <lightning-button variant="success" label="Confirm & Instant Book" icon-name="utility:lock" onclick={handleProcessCheckoutVerification}></lightning-button>
+                            </div>
+                        </div>
+                    </lightning-card>
+                </div>
+            </div>
+        </template>
+
+        <!-- Review Order Summaries Card Panel Interface Drawer Layout -->
+<lightning-card title="Review Flight Order Details" icon-name="utility:money">
+    <div class="slds-p-around_medium">
+        <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+            <p><strong>Current Active Checkout Token ID:</strong> {activeOfferId}</p>
+            <p class="slds-text-heading_medium slds-text-color_success"><strong>Total Price: GBP {activeExpectedPrice}</strong></p>
+        </div>
+        
+        <!-- Utility buttons footer bar layout styled via SLDS -->
+        <div class="slds-text-align_right">
+            <!-- Refresh Action lets users fetch fresh 15-minute tokens instantly if they time out -->
+            <lightning-button 
+                variant="neutral" 
+                label="Token Expired? Refresh Search" 
+                icon-name="utility:refresh" 
+                class="slds-m-right_small" 
+                onclick={handleReturnToSearchStage}>
+            </lightning-button>
+            
+            <lightning-button 
+                variant="success" 
+                label="Confirm & Instant Book" 
+                icon-name="utility:lock" 
+                onclick={handleProcessCheckoutVerification}>
+            </lightning-button>
+        </div>
+    </div>
+</lightning-card>
+
+
+        <!-- VIEW STAGE C: Post-Transaction Booking Success Notification Receipts Panel -->
+        <template if:true={displaySuccessStage}>
+            <div class="slds-text-align_center slds-p-around_large">
+                <lightning-icon icon-name="action:approval" size="large" class="slds-m-bottom_medium"></lightning-icon>
+                <h2 class="slds-text-heading_large slds-text-color_success"><strong>Flight Ticket Reservation Created Successfully!</strong></h2>
+                <p class="slds-text-body_regular slds-m-top_small">Your ticket profile data has been committed live via the Duffel Integration Service Engine.</p>
+                
+                <div class="slds-box slds-theme_shade slds-m-top_medium slds-display_inline-block slds-p-around_medium">
+                    <p class="slds-text-title_caps"><strong>Official Airline PNR Reference Code Tracking Key:</strong></p>
+                    <p class="slds-text-heading_large slds-text-color_error slds-m-top_x-small"><strong>{generatedPnrCode}</strong></p>
+                </div>
+                
+                <div class="slds-m-top_xlarge">
+                    <lightning-button variant="brand" label="Launch New Search" icon-name="utility:search" onclick={handleReturnToSearchStage}></lightning-button>
+                </div>
+            </div>
+        </template>
+
+    </div>
+</template>

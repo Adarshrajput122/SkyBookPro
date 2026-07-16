@@ -1,0 +1,44 @@
+<apex:page controller="CalculatorWizardController">
+    <apex:form id="wizardForm">
+        
+        <!-- STEP 1 PANEL -->
+        <apex:outputPanel rendered="{!showStep1}">
+            <apex:pageBlock title="Step 1: Enter Numbers">
+                <apex:pageBlockSection columns="1">
+                    <apex:inputText value="{!num1}" label="Number 1"/>
+                    <apex:inputText value="{!num2}" label="Number 2"/>
+                </apex:pageBlockSection>
+                <apex:pageBlockButtons location="bottom">
+                    <apex:commandButton value="Next" action="{!goToStep2}" reRender="wizardForm"/>
+                </apex:pageBlockButtons>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        
+        <!-- STEP 2 PANEL -->
+        <apex:outputPanel rendered="{!showStep2}">
+            <apex:pageBlock title="Step 2: Select Operation">
+                <apex:pageBlockSection columns="1">
+                    <apex:selectList value="{!selectedOp}" size="1" label="Operation">
+                        <apex:selectOptions value="{!operationOptions}"/>
+                    </apex:selectList>
+                </apex:pageBlockSection>
+                <apex:pageBlockButtons location="bottom">
+                    <apex:commandButton value="Next" action="{!goToStep3}" reRender="wizardForm"/>
+                </apex:pageBlockButtons>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        
+        <!-- STEP 3 PANEL -->
+        <apex:outputPanel rendered="{!showStep3}">
+            <apex:pageBlock title="Step 3: Result">
+                <apex:pageBlockSection columns="1">
+                    <apex:outputText value="{!result}" label="Result"/>
+                </apex:pageBlockSection>
+                <apex:pageBlockButtons location="bottom">
+                    <apex:commandButton value="Next" action="{!goToStep1}" reRender="wizardForm"/>
+                </apex:pageBlockButtons>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        
+    </apex:form>
+</apex:page>

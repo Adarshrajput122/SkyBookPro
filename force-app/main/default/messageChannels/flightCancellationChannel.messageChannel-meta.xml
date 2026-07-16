@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://sforce.com">
+    <masterLabel>FlightCancellationChannel</masterLabel>
+    <isExposed>true</isExposed>
+    <description>Lightning Message Service channel to broadcast booking updates and trigger dashboard refreshes.</description>
+    
+    <!-- FIX: Corrected XML tag naming scheme from messageFields to lightningMessageFields -->
+    <lightningMessageFields>
+        <fieldName>bookingId</fieldName>
+        <description>The record ID of the cancelled booking slip.</description>
+    </lightningMessageFields>
+    
+    <lightningMessageFields>
+        <fieldName>status</fieldName>
+        <description>The state status string tag value.</description>
+    </lightningMessageFields>
+</LightningMessageChannel>

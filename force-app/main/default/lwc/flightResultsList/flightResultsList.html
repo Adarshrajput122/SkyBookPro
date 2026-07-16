@@ -1,0 +1,28 @@
+<template>
+    <lightning-card title="Available Flight Offers" icon-name="custom:custom14">
+        <div class="slds-p-around_medium">
+            <!-- 1. Conditional Empty State Display Layer -->
+            <template if:false={hasResults}>
+                <div class="slds-text-align_center slds-p-around_large slds-text-color_weak">
+                    <lightning-icon icon-name="utility:info" size="large" class="slds-m-bottom_small"></lightning-icon>
+                    <p class="slds-text-heading_small">No flight listings found. Enter search parameters above to view live inventory options.</p>
+                </div>
+            </template>
+
+            <!-- 2. Active Inventory Matching Offer Rows Loops -->
+            <template if:true={hasResults}>
+                <div class="slds-grid slds-wrap slds-gutter_medium">
+                    <template for:each={flightOffers} for:item="offer">
+                        <div key={offer.offerId} class="slds-col slds-size_1-of-1 slds-m-bottom_medium">
+                            <!-- Calls individual item display card template and passes properties downwards -->
+                            <c-flight-result-card 
+                                flight-offer={offer}
+                                onselectflight={handleFlightSelectionForwarding}>
+                            </c-flight-result-card>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

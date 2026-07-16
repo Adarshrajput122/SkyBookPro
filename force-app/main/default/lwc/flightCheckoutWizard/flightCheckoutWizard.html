@@ -1,0 +1,67 @@
+<template>
+    <lightning-card title="Flight Checkout Wizard" icon-name="utility:money">
+        <div class="slds-p-around_medium">
+            <lightning-progress-indicator current-step={currentStep} type="base" class="slds-m-bottom_large">
+                <lightning-progress-step label="Passengers" value="1"></lightning-progress-step>
+                <lightning-progress-step label="Confirmation" value="2"></lightning-progress-step>
+                <lightning-progress-step label="Success" value="3"></lightning-progress-step>
+            </lightning-progress-indicator>
+
+            <!-- PART A: passengerDetailsForm Inputs Layout -->
+            <template if:true={isStepOne}>
+                <div class="slds-text-heading_small slds-m-bottom_medium"><strong>Passenger Profile Entry Form</strong></div>
+                <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                    <div class="slds-grid slds-wrap slds-gutter_small">
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input type="text" label="First Name" value={passenger.firstName} required onchange={handleFirstChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input type="text" label="Last Name" value={passenger.lastName} required onchange={handleLastChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input type="date" label="Date of Birth (DOB)" required onchange={handleDobChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input type="text" label="Passport ID" required onchange={handlePassportChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-combobox label="Meal Preference" value={passenger.mealPref} options={mealOptions} onchange={handleMealChange}></lightning-combobox>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-text-align_right">
+                    <lightning-button variant="brand" label="Review Summary" icon-name="utility:forward" onclick={goToStepTwo}></lightning-button>
+                </div>
+            </template>
+
+            <!-- PART B: bookingConfirmation Order Summary Layout -->
+            <template if:true={isStepTwo}>
+                <div class="slds-text-heading_small slds-m-bottom_medium"><strong>Review Order Breakdowns Summary</strong></div>
+                <div class="slds-box slds-theme_default slds-m-bottom_medium">
+                    <p><strong>Passenger Account:</strong> {passenger.firstName} {passenger.lastName}</p>
+                    <p><strong>Passport ID Code:</strong> {passenger.passport}</p>
+                    <p><strong>Catering Request:</strong> {passenger.mealPref}</p>
+                    <hr/>
+                    <p class="slds-text-heading_medium slds-text-color_success"><strong>Verification Status Total: GBP {expectedPrice}</strong></p>
+                </div>
+                <div class="slds-text-align_right">
+                    <lightning-button variant="neutral" label="Back" class="slds-m-right_small" onclick={goToStepOne}></lightning-button>
+                    <lightning-button variant="success" label="Confirm & Instant Book" icon-name="utility:lock" onclick={executeFinalBooking}></lightning-button>
+                </div>
+            </template>
+
+            <!-- PART C: bookingSuccess Notification Layout Screen -->
+            <template if:true={isStepThree}>
+                <div class="slds-text-align_center slds-p-around_large">
+                    <lightning-icon icon-name="action:approval" size="large" class="slds-m-bottom_medium"></lightning-icon>
+                    <h2 class="slds-text-heading_large slds-text-color_success"><strong>Booking Confirmed Successfully!</strong></h2>
+                    <p class="slds-m-top_small">Your ticket parameters has been issued live via the Duffel Integration Service Engine.</p>
+                    <div class="slds-box slds-theme_shade slds-m-top_medium slds-display_inline-block">
+                        <p class="slds-text-title_caps"><strong>Official Carrier Ticket PNR Reference:</strong></p>
+                        <p class="slds-text-heading_medium slds-text-color_error"><strong>{pnrCode}</strong></p>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

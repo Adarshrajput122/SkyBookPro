@@ -1,0 +1,48 @@
+<template>
+    <!-- 1. The Core Operations Queue Panel Dashboard -->
+    <lightning-card title="Travel Agent Operations Dashboard" icon-name="utility:dashboard">
+        <div class="slds-p-around_medium">
+            <lightning-button label="Refresh Queue" icon-name="utility:refresh" class="slds-m-bottom_small" onclick={refreshQueueData}></lightning-button>
+            
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">PNR Reference</th>
+                        <th scope="col">Active Status</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={bookingsList} for:item="bk">
+                        <tr key={bk.Id} class="slds-hint-parent">
+                            <td><a onclick={navigateToRecord} data-id={bk.Id}><strong>{bk.Name}</strong></a></td>
+                            <td><span class="slds-badge">{bk.Booking_Status__c}</span></td>
+                            <td>
+                                <lightning-button label="Cancel" variant="destructive" size="x-small" onclick={handleOpenModal} data-id={bk.Id}></lightning-button>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </lightning-card>
+
+    <!-- 2. Overlay cancellationModal Component Popup Box Dialog -->
+    <template if:true={isModalOpen}>
+        <section role="dialog" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <h1 class="slds-text-heading_medium">Confirm Ticket Cancellation</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-textarea label="Cancellation Reason Input" placeholder="Supply administrative justification context details..." required></lightning-textarea>
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning-button label="Dismiss" class="slds-m-right_small" onclick={handleCloseModal}></lightning-button>
+                    <lightning-button variant="destructive" label="Execute Cancellation" onclick={handleConfirmCancellation}></lightning-button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

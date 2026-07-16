@@ -1,0 +1,90 @@
+<template>
+    <lightning-card title="Search Flight Routes" icon-name="custom:custom20">
+        <div class="slds-p-around_medium">
+            <!-- Loading Indicator Spinner Wheel -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Querying Flight Inventory..." size="medium"></lightning-spinner>
+            </template>
+
+            <!-- Grid Structural Layout Wrapper -->
+            <div class="slds-grid slds-wrap slds-gutter_small">
+                
+                <!-- Origin Endpoint Entry Field -->
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <lightning-input 
+                        type="text" 
+                        label="Origin Airport (IATA)" 
+                        value={origin} 
+                        max-length="3"
+                        placeholder="e.g. LHR"
+                        required
+                        class="validate-field"
+                        onchange={handleOriginChange}>
+                    </lightning-input>
+                </div>
+
+                <!-- Destination Endpoint Entry Field -->
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <lightning-input 
+                        type="text" 
+                        label="Destination Airport (IATA)" 
+                        value={destination} 
+                        max-length="3"
+                        placeholder="e.g. JFK"
+                        required
+                        class="validate-field"
+                        onchange={handleDestinationChange}>
+                    </lightning-input>
+                </div>
+
+                <!-- Timeline Schedule Timestamp Field -->
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <lightning-input 
+                        type="date" 
+                        label="Departure Date" 
+                        value={departureDate} 
+                        required
+                        class="validate-field"
+                        onchange={handleDepartureChange}>
+                    </lightning-input>
+                </div>
+
+                <!-- Cabin Service Configurations Dropdown Menu -->
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <lightning-combobox
+                        name="cabinClass"
+                        label="Cabin Class"
+                        value={cabinClass}
+                        options={cabinOptions}
+                        onchange={handleCabinChange}>
+                    </lightning-combobox>
+                </div>
+
+                <!-- Ticket Allocation Bounds Fields -->
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <lightning-input 
+                        type="number" 
+                        label="Adult Passengers" 
+                        value={adults} 
+                        min="1" 
+                        max="9"
+                        required
+                        class="validate-field"
+                        onchange={handleAdultsChange}>
+                    </lightning-input>
+                </div>
+
+                <!-- Execution Confirmation Dispatch Button Trigger -->
+                <div class="slds-col slds-size_1-of-1 slds-m-top_medium slds-text-align_right">
+                    <lightning-button 
+                        variant="brand" 
+                        label="Search Flights" 
+                        icon-name="utility:search"
+                        onclick={handleSearchExecute}>
+                    </lightning-button>
+                </div>
+
+            </div>
+        </div>
+    </lightning-card>
+</template>

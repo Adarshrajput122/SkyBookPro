@@ -1,0 +1,68 @@
+<template>
+    <!-- PART A: agentDashboard & myBookingsDashboard Data Layout Tables Queue -->
+    <lightning-card title="Agent Booking Operations Queue" icon-name="utility:dashboard">
+        <div class="slds-p-around_medium">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col"><div class="slds-truncate">Booking Record Code</div></th>
+                        <th scope="col"><div class="slds-truncate">Active Status</div></th>
+                        <th scope="col"><div class="slds-truncate">Action</div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={bookingsList} for:item="bk">
+                        <tr key={bk.Id} class="slds-hint-parent">
+                            <td><div class="slds-truncate"><strong>{bk.Name}</strong></div></td>
+                            <td><span class="slds-badge slds-badge_lightest">{bk.Booking_Status__c}</span></td>
+                            <td>
+                                <lightning-button-icon icon-name="utility:rows" alternative-text="View Details" onclick={openDetailView} data-id={bk.Id}></lightning-button-icon>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </lightning-card>
+
+    <!-- PART B: bookingDetailView Extended Detail Canvas Drawer Panel -->
+    <template if:true={selectedBookingId}>
+        <lightning-card title="Booking Detail Record View Workspace" icon-name="utility:info" class="slds-m-top_medium">
+            <div class="slds-p-around_medium">
+                <p><strong>Selected Record Database Key:</strong> {selectedBookingId}</p>
+                <div class="slds-m-top_medium slds-text-align_right">
+                    <lightning-button variant="destructive" label="Cancel Reservation" icon-name="utility:close" onclick={openCancellationModal}></lightning-button>
+                </div>
+
+                <!-- PART C: refundStatusTracker Visual Status Path Progress Timeline Bars Gauge -->
+                <div class="slds-m-top_large">
+                    <div class="slds-text-title_caps slds-m-bottom_small"><strong>Refund processing tracking status pipeline:</strong></div>
+                    <lightning-progress-indicator current-step="2" type="path">
+                        <lightning-progress-step label="Request Logged" value="1"></lightning-progress-step>
+                        <lightning-progress-step label="Auditing Penalty Fees" value="2"></lightning-progress-step>
+                        <lightning-progress-step label="Reimbursement Dispatched" value="3"></lightning-progress-step>
+                    </lightning-progress-indicator>
+                </div>
+            </div>
+        </lightning-card>
+    </template>
+
+    <!-- PART D: cancellationModal Confirmation Popup Dialog Window Modals Box -->
+    <template if:true={isModalOpen}>
+        <section role="dialog" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <h1 class="slds-text-heading_medium">Confirm Ticket Cancellation</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-textarea label="Cancellation Reason Input" placeholder="Please supply an administrative reason narrative for this cancellation action..." required></lightning-textarea>
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning-button label="Dismiss" class="slds-m-right_small" onclick={closeCancellationModal}></lightning-button>
+                    <lightning-button variant="destructive" label="Confirm Cancellation Action" onclick={executeCancellationAction}></lightning-button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
