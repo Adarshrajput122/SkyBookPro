@@ -1,3 +1,55 @@
+# SkyBook Pro – Airline Booking Management System
+
+SkyBook Pro is a comprehensive Tour Planning and Airline Ticket Booking Management System built entirely on the Salesforce platform. The application interfaces with the live Amadeus Flight Offers Search & Booking API to deliver real-time flight inventory management, automated traveler dashboard components, and customer flight reservation structures.
+
+## 🛠️ Project Technical Architecture
+*   **Presentation Layer:** 12 native Lightning Web Components (LWC) styled with SLDS utility classes.
+*   **Controller Layer:** Cacheable and imperative `@AuraEnabled` Apex methods.
+*   **Service Layer:** Modular Apex engine (`BookingService`, `AmadeusAuthService`, `AmadeusFlightSearchService`).
+*   **Integration Layer:** Amadeus REST API processing authenticated via Named Credentials.
+*   **Automation Engine:** 4 Record-Triggered/Scheduled Flows, 1 Validation Rule suite, and a Group Booking Approval Process.
+
+## 📂 Salesforce DX Package Directory Structure
+Ensure your `force-app/main/default/` contains the following custom modules required by the Business Requirements Document (BRD):
+
+```text
+force-app/main/default/
+├── classes/
+│   ├── AmadeusAuthService.cls            # Handles OAuth2 Bearer token generation and caching
+│   ├── AmadeusFlightSearchService.cls    # Calls /v2/shopping/flight-offers API endpoint
+│   ├── FlightOfferWrapper.cls            # @AuraEnabled OOP Data Wrapper for LWC data binding
+│   ├── BookingService.cls                # Handles DML transactional logic for booking insertions
+│   ├── BookingTriggerHandler.cls         # Handles validation and automation for the Booking lifecycle
+│   ├── BookingArchiveBatch.cls           # Asynchronous Batch Apex for data management
+│   └── TestDataFactory.cls               # Centralized test data provisioning isolation class
+├── lwc/
+│   ├── flightSearchForm/                 # Input terminal matching origin, destination, and dates
+│   ├── flightResultsList/                # Renders collections using template iterations
+│   ├── passengerDetailsForm/             # Dynamic multi-passenger dynamic form structure
+│   ├── bookingConfirmation/              # Order checkout checkpoint executing imperative Apex calls
+│   └── myBookingsDashboard/              # @wire adapter datatable rendering passenger flights
+├── objects/
+│   ├── Flight__c/                        # Stores Amadeus flight record details
+│   ├── Booking__c/                       # Transaction head record mapping travelers to flights
+│   ├── Passenger_Detail__c/              # Master-Detail child storing passenger metadata
+│   ├── Flight_Segment__c/                # Master-Detail leg tracker for connected flight paths
+│   └── Refund__c/                        # Tracks refund values, requests, and processing statuses
+└── messageChannels/
+    └── SkyBook_Channel__c.messageChannel-meta.xml  # Shared LMS channel for component communication
+```
+
+## 🚀 Key CLI Deployment Commands
+To deploy your data model, triggers, and components into your target scratch org or Developer sandbox, run these commands:
+
+1. **Deploy your structural metadata:**
+   ```bash
+   sf project deploy start
+   ```
+2. **Execute your local Apex testing suite:**
+   ```bash
+   sf apex run test --detailed-logging --result-format human
+   ```
+
 # Salesforce DX Project
 
 Salesforce DX is a development approach that brings source-driven development, team collaboration, and continuous integration to the Salesforce Platform. Instead of working directly in an org through a web browser, you work with metadata as source files in a local DX project, track changes in version control, and deploy through automated processes.
