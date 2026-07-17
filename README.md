@@ -1,6 +1,6 @@
 # SkyBook Pro – Airline Booking Management System
 
-SkyBook Pro is a comprehensive Tour Planning and Airline Ticket Booking Management System built entirely on the Salesforce platform. The application interfaces with the live Amadeus Flight Offers Search & Booking API to deliver real-time flight inventory management, automated traveler dashboard components, and customer flight reservation structures.
+SkyBook Pro is a comprehensive Tour Planning and Airline Ticket Booking Management System built entirely on the Salesforce platform. The application interfaces with the live Duffle Flight Offers Search & Booking API to deliver real-time flight inventory management, automated traveler dashboard components, and customer flight reservation structures.
 
 ## 🛠️ Project Technical Architecture
 *   **Presentation Layer:** 12 native Lightning Web Components (LWC) styled with SLDS utility classes.
